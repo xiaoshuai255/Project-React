@@ -1,12 +1,19 @@
-import React, { Component } from 'react'
-import {Button} from 'antd'
+import React, { Component } from "react";
+import { BrowserRouter as Router,Route,Switch } from "react-router-dom";
+import routes from "./config/routes";
+
+import './index.less'
 
 export default class APP extends Component {
-	render() {
-		return (
-			<div>
-				<Button type="primary">anniu</Button>
-			</div>
-		)
-	}
+  render() {
+    return (
+      <Router>
+        <Switch>
+          {routes.map((route,index) => {
+            return <Route {...route} key={index} />
+          })}
+        </Switch>
+      </Router>
+    );
+  }
 }
