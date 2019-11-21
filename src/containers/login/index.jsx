@@ -1,23 +1,27 @@
 import React, { Component } from "react";
 import logo from "./logo.png";
-import { Form, Input, Icon, Button, message } from "antd";
-import axios from "axios";
+import { Form, Input, Icon, Button } from "antd";
+import { connect } from "react-redux";
+import { setItem } from "../../utils/storage";
+import { getUserAsync } from "../../redux/action-creators/user";
 
 import "./index.less";
 
 const { Item } = Form;
 
+//修饰器语法
+@connect(null, { getUserAsync })
 @Form.create()
 class Login extends Component {
-	//表单校验函数
+  //表单校验函数，并能收集数据
   validator = (rule, value, callback) => {
     /*
       rule 用来获取当前校验的是哪个表单/Input
       value 当前表单项的值
       callback 不管校验成功还是失败 必须调用的函数
-        callback() 代表校验成功
-				callback('xxx') 代表校验失败
-				rule.filed表示的是getFieldDecorator的第一个参数，(在这里是username或password)
+      callback() 代表校验成功
+			callback('xxx') 代表校验失败
+			rule.filed表示的是getFieldDecorator的第一个参数，(在这里是username或password)
     */
     const name = rule.filed === "username" ? "用户名" : "密码";
 
@@ -37,30 +41,27 @@ class Login extends Component {
   //登录
   handleSubmit = e => {
     //阻止表单的默认行为
-		e.preventDefault();
-		
+    e.preventDefault();
 
+    //values 收集的表单数据
     this.props.form.validateFields((err, values) => {
+      // console.log(values)
       if (!err) {
         //校验成功，请求登录
-        axios
-          .post("http://localhost:5000/api/login", values)
+        const { username, password } = values;
+        this.props
+          .getUserAsync(username, password)
           .then(response => {
-            //请求成功，但是不代表登录成功，需要判断response.data的值
-            if (response.data.status === 0) {
-              //登录成功，跳转页面
-              this.props.history.push("./");
-            } else {
-              //登录失败,将失败信息提示出来
-              message.error(response.data.msg);
-              //清空密码框
-              this.props.form.resetFields(["password"]);
-            }
+            //将token保存在redux中
+            console.log(response); //这里可以打印出token的值
+            //持久化存储用户数据
+            setItem("user", response);
+            //登录成功，跳转页面
+            //在函数中要用history.push()方法跳转网址
+            this.props.history.push("/");
           })
           .catch(err => {
-						console.log(err);
-						//弹出错误信息
-						message.error('网络出现错误，请刷新重试');
+            //错误提示在拦截器中封装好了
             //清空密码框
             this.props.form.resetFields(["password"]);
           });
@@ -160,7 +161,8 @@ class Login extends Component {
   }
 }
 
-// Form.create方法是一个高阶组件用法。 作用：给组件传递form属性
+// Form.create方法是一个高阶组件用法。 作用：给Login组件传递form属性（可以服用form）
 // export default Form.create()(Login);
 
+//修饰器语法
 export default Login;

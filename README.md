@@ -35,3 +35,41 @@
 - 按需加载
 - 自定义主题
   - 具体配置参照 antd 官网
+2. 初始化reedux配置
+
+3. 初始化路由配置
+- 定义routes.js配置文件
+- 在App.js中遍历生成路由
+  - 所有路由1对1严格配对
+	- 路径匹配不上返回404组件
+## 3、完成Login组件
+1. 完成静态组件
+2. 完成动态组件
+
+- 表单校验
+   - Form.create()(Login)高阶组件：给Login组件传递form属性（复用form）
+	 - form对象上面有很多操作表单的方法
+	   - getFieldDecorator 用于做表单校验
+		   - getFieldDecorator('key',{rules:[{required:true,message:''},{}]})(<Input />)
+			 - getFieldDecorator('key',{rules:[{validator:this.validator}]})(<Input/>)
+			 - resetFields 用于重置表单项
+			 - validateFields 用于校验并收集表单数据
+- 登录功能
+  - Form 绑定onSubmit事件，Button设置htmlType属性
+	  - onSubmit事件被禁止默认行为
+	- validateFields 校验并收集表单数据
+	- 校验成功，发送请求，请求登录axios
+
+## redux 开发流程
+1. 先定义 action-creators
+- 定义同步/异步
+  - 如果要发送请求，就定义异步
+	- 如果不要发送请求，就定义同步
+
+2. 定义action-types
+
+3. 定义reducer
+
+4. 通过connect高阶组件给UI组件传递redux数据
+
+5. 组件在使用传递过来的redux数据
