@@ -7,7 +7,7 @@
 export function setItem(key, value) {
 	try {
 		value = JSON.stringify(value)
-	} catch{
+	} finally {
 		window.localStorage.setItem(key, value)
 	}
 }

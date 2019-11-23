@@ -5,11 +5,16 @@
 */
 import { reqLogin } from '../../api'
 
-import { GET_USE_SUCCESS } from '../action-types/user'
+import { GET_USE_SUCCESS, REMOVE_USE_SUCCESS } from '../action-types/user'
 //同步函数
 const getUserSuccess = (user) => ({
 	type: GET_USE_SUCCESS,
 	data: user
+})
+
+export const removeUserSuccess = () => ({
+	type: REMOVE_USE_SUCCESS,
+
 })
 
 //异步函数

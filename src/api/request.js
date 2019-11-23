@@ -5,7 +5,9 @@ import axios from 'axios'
 import codeMessage from '../config/code-message'
 import { message } from 'antd'
 import store from '../redux/store'
-// import store from '../redux/store'
+import { removeItem } from '../utils/storage'
+import { removeUserSuccess } from '../redux/action-creators/user'
+import history from '../utils/history'
 
 // axiosInstance就是Axios实例对象，它的用法和axios基本一样
 const axiosInstance = axios.create({
@@ -60,7 +62,15 @@ axiosInstance.interceptors.response.use(
 		let errorMessage = ''
 		if (error.response) {
 			//说明服务器返回了响应
-			errorMessage = codeMessage[error.response.status] || '未知错误'
+			errorMessage = codeMessage[error.response.status] || '未知错误';
+
+			if (error.response.status === 401) {
+				//说明token有问题
+				//清空本地token (localStorage、redux) 重定向到/login
+				removeItem();
+				store.dispatch(removeUserSuccess()); //调用removeUserSuccess这个方法就可以更新对象
+				history.push('/login')
+			}
 		} else {
 			if (error.message.indexOf('Network Error') !== -1) {
 				errorMessage = '请检查网络连接';
