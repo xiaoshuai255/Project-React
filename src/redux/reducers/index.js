@@ -5,4 +5,6 @@
 import { combineReducers } from 'redux'
 
 import user from './user'
-export default combineReducers({ user })
+import category from './category'
+
+export default combineReducers({ user, categories: category })

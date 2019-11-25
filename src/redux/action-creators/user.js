@@ -25,6 +25,7 @@ export const getUserAsync = (username, password) => {
 			.then((response) => {
 				//创建action
 				const action = getUserSuccess(response)
+				console.log(action)
 				//调用dispatch方法
 				dispatch(action)
 

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Layout } from "antd";
 import LeftNav from "./left-nav";
 import withCheckLogin from "../../containers/with-check-login";
+import HeaderMain from "./header-main";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -29,8 +30,10 @@ class BasicLayout extends Component {
           <LeftNav isDisplay={isDisplay} />
         </Sider>
         <Layout>
-          <Header style={{ background: "#fff", padding: 0 }} />
-          <Content style={{ margin: "0 16px" }}>
+          <Header style={{ background: "#fff", padding: 0 }}>
+            <HeaderMain />
+          </Header>
+          <Content style={{ margin: "80px 16px 40px" }}>
             <div style={{ padding: 24, background: "#fff", minHeight: 360 }}>
               {this.props.children}
             </div>
