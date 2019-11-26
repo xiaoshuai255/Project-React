@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "antd": "^3.25.2",
+    "braft-editor": "^2.3.8",
     "dayjs": "^1.8.17",
     "i18next": "^19.0.1",
     "i18next-browser-languagedetector": "^4.0.1",

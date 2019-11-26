@@ -16,7 +16,8 @@ export default [{
 		title: '商品管理',
 		icon: 'tool',
 		path: '/product'
-	}
+	},
+	
 	]
 },
 {

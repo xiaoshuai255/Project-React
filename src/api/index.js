@@ -28,18 +28,46 @@ export const reqGetCategories = () => axiosInstance({
 export const addCategory = (categoryName) => axiosInstance({
 	method: 'POST',
 	url: '/category/add',
-	data:{
+	data: {
 		categoryName
 	}
 })
 
 
 //修改分类
-export const updateCategory = (categoryName,categoryId) => axiosInstance({
+export const updateCategory = (categoryName, categoryId) => axiosInstance({
 	method: 'POST',
 	url: '/category/update',
-	data:{
+	data: {
 		categoryName,
 		categoryId
+	}
+})
+
+//获取商品列表
+export const getProducts = (pageNum, pageSize) => axiosInstance({
+	method: 'GET',
+	url: '/product/list',
+	params: {
+		pageNum,
+		pageSize
+	}
+})
+
+//请求添加商品数据
+export const reqAddProduct = ({ name, desc, price, categoryId, detail }) => axiosInstance({
+	method: 'POST',
+	url: '/product/add',
+	data: {
+		name, desc, price, categoryId, detail
+	}
+})
+
+//请求修改商品数据
+export const reqUpdateProduct = ({ name, desc, price, categoryId, detail,productId }) => axiosInstance({
+	method: 'POST',
+	url: '/product/update',
+	data: {
+		name, desc, price, categoryId, detail,productId
 	}
 })
