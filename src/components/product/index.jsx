@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Card, Select, Input, Button, Icon, Table } from "antd";
-import { getProducts } from "../../api";
+import { Card, Select, Input, Button, Icon, Table, message } from "antd";
+import { getProducts, reqUpdateProductStatus } from "../../api";
 
 import "./index.less";
 
@@ -25,12 +25,16 @@ export default class Product extends Component {
     },
     {
       title: "状态",
-      dataIndex: "status",
-      render: () => {
+      // dataIndex: "status",
+      render: product => {
+        const status = product.status;
+
         return (
           <div>
-            <Button type="primary">上架</Button>
-            已下架
+            <Button type="primary" onClick={this.updateProductStatus(product)}>
+              {status === 1 ? "上架" : "下架"}
+            </Button>
+            {status === 1 ? "已下架" : "已上架"}
           </div>
         );
       }
@@ -40,7 +44,9 @@ export default class Product extends Component {
       render: product => {
         return (
           <div>
-            <Button type="link">详情</Button>
+            <Button type="link" onClick={this.productDetail(product)}>
+              详情
+            </Button>
             <Button type="link" onClick={this.updateCategory(product)}>
               修改
             </Button>
@@ -57,7 +63,6 @@ export default class Product extends Component {
       products: result.list,
       total: result.total
     });
-    console.log(this.state);
   };
 
   // 页码发生改变事件
@@ -70,8 +75,15 @@ export default class Product extends Component {
     this.props.history.push("/product/add");
   };
 
+  //详情按钮事件
+  productDetail = product => {
+    return () => {
+      this.props.history.push("/product/" + product._id, product);
+    };
+  };
+
   //修改按钮事件
-  updateCategory = (product) => {
+  updateCategory = product => {
     return () => {
       // 地址后面加上id --> 为了在更新商品页面刷新时能够获取到商品id --> 通过id发送请求获取商品数据
       // 第二个参数传入product，组件就能通过location.state获取
@@ -79,9 +91,28 @@ export default class Product extends Component {
     };
   };
 
+  //状态按钮事件(更新商品状态)
+  updateProductStatus = product => {
+    return () => {
+      const productId = product._id;
+      const status = 3 - product.status;
+      reqUpdateProductStatus(productId, status).then(res => {
+        message.success("更新商品状态成功");
+        //更新前端数据
+        this.setState({
+          products: this.state.products.map(product => {
+            if (product._id === productId) {
+              return { ...product, status };
+            }
+            return product;
+          })
+        });
+      });
+    };
+  };
+
   render() {
     const { products, total } = this.state;
-    console.log(products);
     return (
       <Card
         title={
